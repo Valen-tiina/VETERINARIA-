@@ -1,8 +1,8 @@
 package modelo;
 
 import controlador.Coordinador;
+
 import modelo.dao.PersonaDAO;
-import modelo.dto.EntidadesDTO;
 import modelo.dto.PersonaDTO;
 
 public class ProcesosMascota extends ProcesosGenerales {

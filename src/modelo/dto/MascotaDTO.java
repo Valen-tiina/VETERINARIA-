@@ -1,6 +1,6 @@
 package modelo.dto;
 
-public class MascotaDTO implements EntidadesDTO{
+public class MascotaDTO {
 	private String raza;
 	private String nombre;
 	private String sexo;

@@ -1,6 +1,6 @@
 package modelo.dto;
 
-public class PersonaDTO implements EntidadesDTO{
+public class PersonaDTO {
 	private String documento;
 	private String nombre;
 	private int telefono;

@@ -18,7 +18,7 @@ public class ConexionBD {
 	public ConexionBD() {
 		try {
 			Properties properties = new Properties();
-			FileInputStream input = new FileInputStream("C:\\Users\\VALENTINA\\Documents\\TERCER TRIMESTRE\\JAVA\\VETERINARIA\\src\\properties\\config.properties");
+			FileInputStream input = new FileInputStream("C:\\Users\\Aprendiz\\Downloads\\veterinaria JDBC\\VETERINARIA-\\src\\properties\\config.properties");
 			properties.load(input);
 			
 			String driver = properties.getProperty("db.driver");

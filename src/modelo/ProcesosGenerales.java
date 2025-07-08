@@ -1,6 +1,5 @@
 package modelo;
 
-import modelo.dto.EntidadesDTO;
 
 public abstract class ProcesosGenerales {
 	
