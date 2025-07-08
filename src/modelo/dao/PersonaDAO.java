@@ -5,22 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import conexionBD.ConexionBD;
 import controlador.Coordinador;
 import modelo.dto.PersonaDTO;
 
-public class PersonaDAO {
-	private Coordinador coordinador;
-	//coordinador
-	  public void setCoordinador(Coordinador coordinador) {
-	        this.coordinador = coordinador;
-	    }
+public class PersonaDAO extends ModeloDAO<PersonaDTO>{
 	  
 	  Connection connection= null;
 	  ConexionBD conexion = null;
 	  PreparedStatement preparedStatement=null;
 	  ResultSet resultSet=null;
+	  private Coordinador coordinador;
 	  
 	  //metodos crud
 	  //create = insert
@@ -197,4 +194,40 @@ public class PersonaDAO {
 		}
 		  return resp;
 	  }
+
+	  //Coordinator
+	  public void setCoordinador(Coordinador coordinador) {
+		  this.coordinador = coordinador;
+	  }
+
+
+	@Override
+	public String registrar(PersonaDTO dto) throws SQLException {
+		return insertarPersona(dto);
+	}
+
+
+	@Override
+	public PersonaDTO consultar(String documento) throws SQLException {
+		return consultarPorDocumento(documento);
+	}
+
+
+	@Override
+	public ArrayList<PersonaDTO> consultarLista() throws SQLException {
+		return consultarListaPersonas();
+	}
+
+
+	@Override
+	public String actualizar(PersonaDTO dto) throws SQLException {
+		return actualizarPersona(dto);
+	}
+
+
+	@Override
+	public String eliminar(PersonaDTO dto) throws SQLException {
+		return eliminarPersona(dto);
+	}
+	 
 }

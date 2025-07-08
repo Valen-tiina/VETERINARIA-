@@ -2,6 +2,7 @@ package controlador;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import conexionBD.ConexionBD;
 import modelo.ProcesosMascota;
@@ -83,37 +84,37 @@ public class Coordinador {
 	
 	//coordinator + crud personas
 	public String guardarPersona(PersonaDTO persona)throws SQLException{
-		return personaDAO.insertarPersona(persona);
+		return personaDAO.registrar(persona);
 	}
 	public ArrayList<PersonaDTO> listaPersonas()throws SQLException{
-		return personaDAO.consultarListaPersonas();
+		return personaDAO.consultarLista();
 	}
 	public PersonaDTO buscarPorDocumento(String documento) throws SQLException{
-		return personaDAO.consultarPorDocumento(documento);
+		return personaDAO.consultar(documento);
 	}
 	public String actualizarPersona(PersonaDTO persona)throws SQLException{
-		return personaDAO.actualizarPersona(persona);
+		return personaDAO.actualizar(persona);
 	}
 	public String eliminarPersona(PersonaDTO persona)throws SQLException{
-		return personaDAO.eliminarPersona(persona);
+		return personaDAO.eliminar(persona);
 	}
 	
 	
 	//coordinator + crud mascotas
-	/*public String guardarMascota(MascotaDTO mascota)throws SQLException{
-		return
+	public String guardarMascota(MascotaDTO mascota)throws SQLException{
+		return mascotaDAO.registrar(mascota);
 	}
 	public ArrayList<MascotaDTO> listaMascotas()throws SQLException{
-		return
+		return mascotaDAO.consultarLista();
 	}
-	public MascotaDTO buscarMascotaPorID(String documento)throws SQLException{
-		return
+	public MascotaDTO buscarMascotaPorID(String dueno)throws SQLException{
+		return mascotaDAO.consultar(dueno);
 	}
 	public String actualizarMascota(MascotaDTO mascota)throws SQLException{
-		return
+		return mascotaDAO.actualizar(mascota);
 	}
 	public String eliminarMascota(MascotaDTO mascota)throws SQLException{
-		return
+		return mascotaDAO.eliminar(mascota);
 	}
-	*/
+	
 }

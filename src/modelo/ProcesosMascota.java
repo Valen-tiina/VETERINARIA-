@@ -1,6 +1,9 @@
 package modelo;
 
 import controlador.Coordinador;
+import modelo.dao.PersonaDAO;
+import modelo.dto.EntidadesDTO;
+import modelo.dto.PersonaDTO;
 
 public class ProcesosMascota extends ProcesosGenerales {
 	private Coordinador coordinador;
@@ -8,6 +11,8 @@ public class ProcesosMascota extends ProcesosGenerales {
 	  public void setCoordinador(Coordinador coordinador) {
 	        this.coordinador = coordinador;
 	    }
+	  
+	  
 	@Override
 	public boolean validarTexto(String texto) {
 		try {
@@ -39,5 +44,8 @@ public class ProcesosMascota extends ProcesosGenerales {
 		}
 		return retorno;
 	}
+
+
+
 
 }

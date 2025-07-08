@@ -7,11 +7,18 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controlador.Coordinador;
+import modelo.dto.MascotaDTO;
+import modelo.dto.PersonaDTO;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -23,7 +30,7 @@ public class VentanaGestionarMascota extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	 JTextField txxDueno;
+	 JTextField txtDueno;
 	 JTextField txtRaza;
 	 JTextField txtNombreMascota;
 	JTextField txtSexo;
@@ -57,11 +64,11 @@ public class VentanaGestionarMascota extends JDialog implements ActionListener {
 		lblDueno.setBounds(21, 53, 99, 24);
 		contentPane.add(lblDueno);
 		
-		txxDueno = new JTextField();
-		txxDueno.setFont(new Font("Myanmar Text", Font.PLAIN, 16));
-		txxDueno.setColumns(10);
-		txxDueno.setBounds(117, 48, 115, 24);
-		contentPane.add(txxDueno);
+		txtDueno = new JTextField();
+		txtDueno.setFont(new Font("Myanmar Text", Font.PLAIN, 16));
+		txtDueno.setColumns(10);
+		txtDueno.setBounds(117, 48, 115, 24);
+		contentPane.add(txtDueno);
 		
 		JLabel lblRaza = new JLabel("Raza");
 		lblRaza.setFont(new Font("Myanmar Text", Font.PLAIN, 17));
@@ -89,26 +96,31 @@ public class VentanaGestionarMascota extends JDialog implements ActionListener {
 		btnRegistrar.setFont(new Font("Verdana", Font.PLAIN, 14));
 		btnRegistrar.setBounds(10, 139, 108, 21);
 		contentPane.add(btnRegistrar);
+		btnRegistrar.addActionListener(this);
 		
 		 btnConsultar = new JButton("Consultar");
 		btnConsultar.setFont(new Font("Verdana", Font.PLAIN, 14));
 		btnConsultar.setBounds(124, 139, 108, 21);
 		contentPane.add(btnConsultar);
+		btnConsultar.addActionListener(this);
 		
 		 btnActualizar = new JButton("Actualizar");
 		btnActualizar.setFont(new Font("Verdana", Font.PLAIN, 14));
 		btnActualizar.setBounds(242, 139, 108, 21);
 		contentPane.add(btnActualizar);
+		btnActualizar.addActionListener(this);
 		
 		 btnEliminar = new JButton("Eliminar");
 		btnEliminar.setFont(new Font("Verdana", Font.PLAIN, 14));
 		btnEliminar.setBounds(360, 139, 108, 21);
 		contentPane.add(btnEliminar);
+		btnEliminar.addActionListener(this);
 		
 		 btnLista = new JButton("Consultar Lista");
 		btnLista.setFont(new Font("Verdana", Font.PLAIN, 14));
 		btnLista.setBounds(134, 170, 223, 21);
 		contentPane.add(btnLista);
+		btnLista.addActionListener(this);
 		
 		txtSexo = new JTextField();
 		txtSexo.setFont(new Font("Myanmar Text", Font.PLAIN, 16));
@@ -136,7 +148,223 @@ public class VentanaGestionarMascota extends JDialog implements ActionListener {
 	    }
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		if (e.getSource()==btnRegistrar) {
+			try {
+				registrar();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if (e.getSource()==btnConsultar) {
+			try {
+				consultarMascota();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if (e.getSource()==btnLista) {
+			try {
+				listaMascotas();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if (e.getSource()==btnActualizar) {
+			try {
+				actualizar();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if (e.getSource()==btnEliminar) {
+			try {
+				eliminar();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+	private void limpiarDatos() {
+		txtDueno.setText("");
+		txtNombreMascota.setText("");
+		txtRaza.setText("");
+		txtSexo.setText("");
+	}
+
+	private void registrar() throws SQLException{
+		 String docDueno = txtDueno.getText();
+		 String nombre = txtNombreMascota.getText();
+		 String raza = txtRaza.getText();
+		 String sexo = txtSexo.getText();
+		 
+		 //validation
+		 if (!coordinador.validarTextoMascota(sexo)) {
+			JOptionPane.showMessageDialog(this, "Campo de sexo obligatorio, intentalo de nuevo");
+			return;
+		}
+		 if (!coordinador.validarTextoMascota(raza)) {
+			JOptionPane.showMessageDialog(this, "Campo de raza obligatorio, intentalo de nuevo");
+			return;
+		}
+		 if (!coordinador.validarTextoMascota(nombre)) {
+			JOptionPane.showMessageDialog(this, "Campo de nombre obligatorio, intentalo de nuevo");
+			return;
+		}
+		 if (!coordinador.validarNumMascota(docDueno)) {
+			JOptionPane.showMessageDialog(this, "Campo de dueño debe ser numerico\n intentalo de nuevo");
+			return;
+		}
+		 PersonaDTO dueno = new PersonaDTO();
+		 MascotaDTO pet = new MascotaDTO();
+		 dueno.setDocumento(docDueno);
+		 pet.setDueno(dueno);
+		 pet.setNombre(nombre);
+		 pet.setRaza(raza);
+		 pet.setSexo(sexo);
+		 
+		 String res = coordinador.guardarMascota(pet);
+		 if (res.equals("ok")) {
+			JOptionPane.showMessageDialog(this, "Registro de mascota exitoso!!!");
+			limpiarDatos();
+			
+			String resumen = "Documento Dueño: "+docDueno+"\n"+
+							"Nombre mascota: "+nombre+"\n"+
+							"Sexo: "+sexo+"\n"+
+							"Raza: "+raza+"\n";
+			
+			textArea.setText(resumen);
+			System.out.println("Doc dueño: "+dueno.getDocumento());
+			System.out.println("Sexo: "+pet.getSexo());
+			System.out.println("Raza: "+pet.getRaza());
+			System.out.println("Nombre: "+pet.getNombre());
+		} else {
+			textArea.setText("Recuerda que solo se registran mascotas con dueño activo");
+		}
+		 
+	}
+
+	private void consultarMascota() throws SQLException {
+		String Docdueno = txtDueno.getText();
+		String resumen;
+		
+		if (!coordinador.validarNumMascota(Docdueno)) {
+			String validacion = "ingresa un documento a consultar";
+			textArea.setText(validacion);
+			return;
+		}
+		MascotaDTO pet = coordinador.buscarMascotaPorID(Docdueno);
+		if (pet!=null) {
+			resumen = "Documento dueño: "+pet.getDueno()+"\n"+
+					  "Nombre mascota: "+pet.getNombre()+"\n"+
+					  "Sexo mascota: "+pet.getSexo()+"\n"+
+					  "Raza mascota: "+pet.getRaza()+"\n";
+			textArea.setText(resumen);
+			limpiarDatos();
+		} else {
+			resumen = "Mascota sin dueño registrado, intentelo de nuevo";
+			textArea.setText(resumen);
+			limpiarDatos();
+		}
 		
 	}
+
+	private void listaMascotas() throws SQLException {
+		ArrayList<MascotaDTO> registrosMascotas = coordinador.listaMascotas();
+		String resumen;
+		if (registrosMascotas==null) {
+			resumen = "no hay registros de mascotas";
+			textArea.setText(resumen);
+			return;
+		}
+		
+		resumen = "Lista mascotas\n\n";
+		for(MascotaDTO pet : registrosMascotas) {
+			resumen+= "Documento dueño: "+pet.getDueno()
+			+"\nNombre: "+pet.getNombre()
+			+"\nRaza: "+pet.getRaza()
+			+"\nSexo: "+pet.getSexo()
+			+"\n------------------------------------\n";
+			textArea.setText(resumen);
+		}
+		
+		
+	}
+
+	private void actualizar() throws SQLException {
+		String idDueno = txtDueno.getText();
+		String nombre = txtNombreMascota.getText();
+		String raza = txtRaza.getText();
+		String sexo = txtSexo.getText();
+		String resumen;
+		
+		if (!coordinador.validarNumMascota(idDueno)) {
+			JOptionPane.showMessageDialog(this, "Ingresa un documento para actualizar");
+			return;
+		}
+		
+		MascotaDTO pet = new MascotaDTO();
+		 PersonaDTO dueno = new PersonaDTO();
+		 dueno.setDocumento(idDueno);
+		 pet.setDueno(dueno);
+		 pet.setNombre(nombre);
+		 pet.setRaza(raza);
+		 pet.setSexo(sexo);
+		 
+		 String confirm = coordinador.actualizarMascota(pet);
+		 if (confirm.equals("ok")) {
+			resumen = "Datos actualizados\n\n"+
+					  "Documento Dueño: "+ dueno.getDocumento()+
+					  "\nNombre: "+pet.getNombre()+
+					  "\nRaza: "+pet.getRaza()+
+					  "\nSexo: "+pet.getSexo();
+			
+			textArea.setText(resumen);
+			limpiarDatos();
+		}else if (confirm.equals("error")) {
+			resumen = "No se puede actualizar documentos inexistentes";
+			textArea.setText(resumen);
+			limpiarDatos();
+		} else {
+			resumen = "error inesperado, intentalo nuevamente";
+			textArea.setText(resumen);
+			limpiarDatos();
+		}
+		
+		
+	}
+
+	private void eliminar() throws SQLException{
+		String idDueno = txtDueno.getText();
+		String confirm;
+		String resumen;
+		
+		if (!coordinador.validarNumMascota(idDueno)) {
+			JOptionPane.showMessageDialog(this, "No se puede eliminar un registro inexistente");
+			return;
+		}
+		MascotaDTO pet = new MascotaDTO();
+		PersonaDTO dueno = new PersonaDTO();
+		dueno.setDocumento(idDueno);
+		pet.setDueno(dueno);
+		confirm = coordinador.eliminarMascota(pet);
+		if (confirm.equals("ok")) {
+			resumen = "Mascota con documento de dueno "+dueno.getDocumento()+" ha sido eliminado correctamente";
+			textArea.setText(resumen);
+			limpiarDatos();
+		} else if(confirm.equals("error")) {
+			resumen = "No se puede eliminar una mascota no registrada";
+			textArea.setText(resumen);
+			limpiarDatos();
+		} else {
+			resumen = "error inesperado, intentalo nuevamente";
+			textArea.setText(resumen);
+		}
+		
+	}
+
 }

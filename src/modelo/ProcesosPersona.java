@@ -1,6 +1,11 @@
 package modelo;
 
+import java.sql.SQLException;
+
 import controlador.Coordinador;
+import modelo.dao.PersonaDAO;
+import modelo.dto.EntidadesDTO;
+import modelo.dto.PersonaDTO;
 
 public class ProcesosPersona extends ProcesosGenerales {
 	private Coordinador coordinador;
@@ -34,6 +39,7 @@ public class ProcesosPersona extends ProcesosGenerales {
 		return retorno;
 	}
 	
+
 
 
 
